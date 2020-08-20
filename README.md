@@ -52,8 +52,8 @@ output_paths = stdout
 error_output_paths = stderr
 ## 自定义的key
 initial_fields_key = service
-## 自定义的value。与initial_fields_key打印如： {"service": "SSHMutualTrust"}
-initial_fields_value = SSHMutualTrust
+## 自定义的value。与initial_fields_key打印如： {"service": "sshTrust"}
+initial_fields_value = sshTrust
 ## 是否开启日志切割, 打开之后只会识别rotate_file, 如果需要打印console，请打开rotate_console
 enable_rotate = true
 ## 屏幕打印日志
@@ -71,7 +71,7 @@ rotate_compress = false
 ```
 
 ### 3.2 `singleNode.conf`
-> 此配置文件在操作`./sshMutualTrust single`时需要配置。
+> 此配置文件在操作`./sshTrust single`时需要配置。
 
 > 格式：`ip port username password`
 ```vim
@@ -109,7 +109,7 @@ Available Commands:
 Flags:
   -h, --help   help for sshTrust
 
-Use "sshMutualTrust [command] --help" for more information about a command.
+Use "sshTrust [command] --help" for more information about a command.
 ```
 
 ### 4.2 多主机间互信
@@ -122,22 +122,22 @@ example:
 (2) 执行`./sshTrust many`
 example:
 ```shell
-$ ./sshMutualTrust many
-{"level":"info","time":"2020-03-13 20:29:40","msg":"开始配置主机互信!","service":"SSHMutualTrust"}
-{"level":"info","time":"2020-03-13 20:29:50","msg":"连接主机[192.168.75.175:22]成功！","service":"SSHMutualTrust"}
-{"level":"info","time":"2020-03-13 20:29:50","msg":"检查主机[192.168.75.175:22]是否存在密钥，不存在将创建！","service":"SSHMutualTrust"}
-{"level":"info","time":"2020-03-13 20:29:50","msg":"连接主机[192.168.75.174:22]成功！","service":"SSHMutualTrust"}
-{"level":"info","time":"2020-03-13 20:29:50","msg":"检查主机[192.168.75.174:22]是否存在密钥，不存在将创建！","service":"SSHMutualTrust"}
-{"level":"info","time":"2020-03-13 20:29:50","msg":"主机[192.168.75.175:22]密钥检查完毕！","service":"SSHMutualTrust"}
-{"level":"info","time":"2020-03-13 20:29:50","msg":"正在搜集主机[192.168.75.175:22]密钥！","service":"SSHMutualTrust"}
-{"level":"info","time":"2020-03-13 20:29:50","msg":"主机[192.168.75.174:22]密钥检查完毕！","service":"SSHMutualTrust"}
-{"level":"info","time":"2020-03-13 20:29:50","msg":"正在搜集主机[192.168.75.174:22]密钥！","service":"SSHMutualTrust"}
-{"level":"info","time":"2020-03-13 20:29:50","msg":"主机[192.168.75.175:22]密钥搜集完毕！","service":"SSHMutualTrust"}
-{"level":"info","time":"2020-03-13 20:29:50","msg":"主机[192.168.75.174:22]密钥搜集完毕！","service":"SSHMutualTrust"}
-{"level":"info","time":"2020-03-13 20:30:00","msg":"主机[192.168.75.175:22]写入互信密钥完毕！","service":"SSHMutualTrust"}
-{"level":"info","time":"2020-03-13 20:30:00","msg":"主机[192.168.75.175:22]互信中间缓存文件清理完毕！","service":"SSHMutualTrust"}
-{"level":"info","time":"2020-03-13 20:30:00","msg":"主机[192.168.75.174:22]写入互信密钥完毕！","service":"SSHMutualTrust"}
-{"level":"info","time":"2020-03-13 20:30:00","msg":"主机[192.168.75.174:22]互信中间缓存文件清理完毕！","service":"SSHMutualTrust"}
+$ ./sshTrust many
+{"level":"info","time":"2020-03-13 20:29:40","msg":"开始配置主机互信!","service":"sshTrust"}
+{"level":"info","time":"2020-03-13 20:29:50","msg":"连接主机[192.168.75.175:22]成功！","service":"sshTrust"}
+{"level":"info","time":"2020-03-13 20:29:50","msg":"检查主机[192.168.75.175:22]是否存在密钥，不存在将创建！","service":"sshTrust"}
+{"level":"info","time":"2020-03-13 20:29:50","msg":"连接主机[192.168.75.174:22]成功！","service":"sshTrust"}
+{"level":"info","time":"2020-03-13 20:29:50","msg":"检查主机[192.168.75.174:22]是否存在密钥，不存在将创建！","service":"sshTrust"}
+{"level":"info","time":"2020-03-13 20:29:50","msg":"主机[192.168.75.175:22]密钥检查完毕！","service":"sshTrust"}
+{"level":"info","time":"2020-03-13 20:29:50","msg":"正在搜集主机[192.168.75.175:22]密钥！","service":"sshTrust"}
+{"level":"info","time":"2020-03-13 20:29:50","msg":"主机[192.168.75.174:22]密钥检查完毕！","service":"sshTrust"}
+{"level":"info","time":"2020-03-13 20:29:50","msg":"正在搜集主机[192.168.75.174:22]密钥！","service":"sshTrust"}
+{"level":"info","time":"2020-03-13 20:29:50","msg":"主机[192.168.75.175:22]密钥搜集完毕！","service":"sshTrust"}
+{"level":"info","time":"2020-03-13 20:29:50","msg":"主机[192.168.75.174:22]密钥搜集完毕！","service":"sshTrust"}
+{"level":"info","time":"2020-03-13 20:30:00","msg":"主机[192.168.75.175:22]写入互信密钥完毕！","service":"sshTrust"}
+{"level":"info","time":"2020-03-13 20:30:00","msg":"主机[192.168.75.175:22]互信中间缓存文件清理完毕！","service":"sshTrust"}
+{"level":"info","time":"2020-03-13 20:30:00","msg":"主机[192.168.75.174:22]写入互信密钥完毕！","service":"sshTrust"}
+{"level":"info","time":"2020-03-13 20:30:00","msg":"主机[192.168.75.174:22]互信中间缓存文件清理完毕！","service":"sshTrust"}
 ```
 
 ### 4.3 单节点互信多节点
@@ -158,22 +158,22 @@ example:
 (3)执行`./sshTrust single`
 ```shell
 $ ./sshTrust single
-{"level":"info","time":"2020-03-13 20:31:31","msg":"开始配置主机互信!","service":"SSHMutualTrust"}
-{"level":"info","time":"2020-03-13 20:31:31","msg":"连接主机[127.0.0.1:22]成功！","service":"SSHMutualTrust"}
-{"level":"info","time":"2020-03-13 20:31:31","msg":"检查主机[127.0.0.1:22]是否存在密钥，不存在将创建！","service":"SSHMutualTrust"}
-{"level":"info","time":"2020-03-13 20:31:31","msg":"主机[127.0.0.1:22]密钥检查完毕！","service":"SSHMutualTrust"}
-{"level":"info","time":"2020-03-13 20:31:31","msg":"正在搜集主机[127.0.0.1:22]密钥！","service":"SSHMutualTrust"}
-{"level":"info","time":"2020-03-13 20:31:31","msg":"主机[127.0.0.1:22]密钥搜集完毕！","service":"SSHMutualTrust"}
-{"level":"info","time":"2020-03-13 20:31:41","msg":"连接主机[192.168.75.111:22]成功！","service":"SSHMutualTrust"}
-{"level":"info","time":"2020-03-13 20:31:41","msg":"检查主机[192.168.75.111:22]是否存在密钥，不存在将创建！","service":"SSHMutualTrust"}
-{"level":"info","time":"2020-03-13 20:31:41","msg":"主机[192.168.75.111:22]密钥检查完毕！","service":"SSHMutualTrust"}
-{"level":"info","time":"2020-03-13 20:31:41","msg":"正在搜集主机[192.168.75.111:22]密钥！","service":"SSHMutualTrust"}
-{"level":"info","time":"2020-03-13 20:31:41","msg":"主机[192.168.75.111:22]密钥搜集完毕！","service":"SSHMutualTrust"}
-{"level":"info","time":"2020-03-13 20:31:41","msg":"开始配置主机互信!","service":"SSHMutualTrust"}
-{"level":"info","time":"2020-03-13 20:31:51","msg":"主机[192.168.75.175:22]写入互信密钥完毕！","service":"SSHMutualTrust"}
-{"level":"info","time":"2020-03-13 20:31:51","msg":"主机[192.168.75.175:22]互信中间缓存文件清理完毕！","service":"SSHMutualTrust"}
-{"level":"info","time":"2020-03-13 20:31:51","msg":"主机[192.168.75.174:22]写入互信密钥完毕！","service":"SSHMutualTrust"}
-{"level":"info","time":"2020-03-13 20:31:51","msg":"主机[192.168.75.174:22]互信中间缓存文件清理完毕！","service":"SSHMutualTrust"}
+{"level":"info","time":"2020-03-13 20:31:31","msg":"开始配置主机互信!","service":"sshTrust"}
+{"level":"info","time":"2020-03-13 20:31:31","msg":"连接主机[127.0.0.1:22]成功！","service":"sshTrust"}
+{"level":"info","time":"2020-03-13 20:31:31","msg":"检查主机[127.0.0.1:22]是否存在密钥，不存在将创建！","service":"sshTrust"}
+{"level":"info","time":"2020-03-13 20:31:31","msg":"主机[127.0.0.1:22]密钥检查完毕！","service":"sshTrust"}
+{"level":"info","time":"2020-03-13 20:31:31","msg":"正在搜集主机[127.0.0.1:22]密钥！","service":"sshTrust"}
+{"level":"info","time":"2020-03-13 20:31:31","msg":"主机[127.0.0.1:22]密钥搜集完毕！","service":"sshTrust"}
+{"level":"info","time":"2020-03-13 20:31:41","msg":"连接主机[192.168.75.111:22]成功！","service":"sshTrust"}
+{"level":"info","time":"2020-03-13 20:31:41","msg":"检查主机[192.168.75.111:22]是否存在密钥，不存在将创建！","service":"sshTrust"}
+{"level":"info","time":"2020-03-13 20:31:41","msg":"主机[192.168.75.111:22]密钥检查完毕！","service":"sshTrust"}
+{"level":"info","time":"2020-03-13 20:31:41","msg":"正在搜集主机[192.168.75.111:22]密钥！","service":"sshTrust"}
+{"level":"info","time":"2020-03-13 20:31:41","msg":"主机[192.168.75.111:22]密钥搜集完毕！","service":"sshTrust"}
+{"level":"info","time":"2020-03-13 20:31:41","msg":"开始配置主机互信!","service":"sshTrust"}
+{"level":"info","time":"2020-03-13 20:31:51","msg":"主机[192.168.75.175:22]写入互信密钥完毕！","service":"sshTrust"}
+{"level":"info","time":"2020-03-13 20:31:51","msg":"主机[192.168.75.175:22]互信中间缓存文件清理完毕！","service":"sshTrust"}
+{"level":"info","time":"2020-03-13 20:31:51","msg":"主机[192.168.75.174:22]写入互信密钥完毕！","service":"sshTrust"}
+{"level":"info","time":"2020-03-13 20:31:51","msg":"主机[192.168.75.174:22]互信中间缓存文件清理完毕！","service":"sshTrust"}
 ```
 说明：
 - 操作完成后`192.168.75.174`和`192.168.75.175`的`~/.ssh/authorized_keys`中会添加`127.0.0.1`、`192.168.75.111`的`~/.ssh/id_rsa.pub`
