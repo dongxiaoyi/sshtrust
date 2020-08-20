@@ -1,18 +1,17 @@
-# sshMutualTrust说明文档
+# sshTrust说明文档
 ## 一、简介
 > 本项目用于方便主机(间)的互信操作。已在centos/rhel中测试。
 
 
 ## 二、项目结构
 ```shell
-$ tree sshMutualTrustBin/
-sshMutualTrustBin
+$ tree sshTrustBin/
+sshTrustBin
 ├── configs
 │   ├── manyNode.conf      ## 多个主机的连接信息
 │   ├── settings.ini       ## 配置文件
 │   └── singleNode.conf    ## 单个主机的连接信息（可以填写多个）
-├── sshMutualTrust         ## 执行脚本（Linux AMD64） 
-└── sshMutualTrustMac      ## 执行脚本（MacOS）
+└── sshTrust      ## 执行脚本（Linux）
 
 1 directory, 5 files
 ```
@@ -83,7 +82,7 @@ rotate_compress = false
 - 配置中的主机的密钥将会分发给`manyNode.conf`中的主机。
 
 ### 3.3 `manyNode.conf`
-> 此配置文件在操作`./sshMutualTrust single`和`./sshMutualTrust many`时都需要配置。
+> 此配置文件在操作`./sshTrust single`和`./sshTrust many`时都需要配置。
 > 
 
 > 格式：`ip port username password`
@@ -92,15 +91,15 @@ rotate_compress = false
 192.168.75.175 22 root redhat
 ```
 说明：
-- 在操作`./sshMutualTrust single`时每个主机都会接受`singleNode.conf`中的主机的密钥。
-- 在操作`./sshMutualTrust many`时每个主机之间形成互信。
+- 在操作`./sshTrust single`时每个主机都会接受`singleNode.conf`中的主机的密钥。
+- 在操作`./sshTrust many`时每个主机之间形成互信。
 
 ## 四、互信操作
 ### 4.1 操作指令说明
 ```shell
-$ ./sshMutualTrust --help                                 
+$ ./sshTrust --help                                 
 Usage:
-  sshMutualTrust [command]
+  sshTrust [command]
 
 Available Commands:
   help        Help about any command
@@ -108,7 +107,7 @@ Available Commands:
   single      单节点互信多节点（配置singleNode.conf和manyNode.conf）.
 
 Flags:
-  -h, --help   help for sshMutualTrust
+  -h, --help   help for sshTrust
 
 Use "sshMutualTrust [command] --help" for more information about a command.
 ```
@@ -120,7 +119,7 @@ example:
 192.168.75.174 22 root redhat
 192.168.75.175 22 root redhat
 ```
-(2) 执行`./sshMutualTrust many`
+(2) 执行`./sshTrust many`
 example:
 ```shell
 $ ./sshMutualTrust many
@@ -156,9 +155,9 @@ example:
 192.168.75.174 22 root redhat
 192.168.75.175 22 root redhat
 ```
-(3)执行`./sshMutualTrust single`
+(3)执行`./sshTrust single`
 ```shell
-$ ./sshMutualTrust single
+$ ./sshTrust single
 {"level":"info","time":"2020-03-13 20:31:31","msg":"开始配置主机互信!","service":"SSHMutualTrust"}
 {"level":"info","time":"2020-03-13 20:31:31","msg":"连接主机[127.0.0.1:22]成功！","service":"SSHMutualTrust"}
 {"level":"info","time":"2020-03-13 20:31:31","msg":"检查主机[127.0.0.1:22]是否存在密钥，不存在将创建！","service":"SSHMutualTrust"}
