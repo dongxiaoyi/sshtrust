@@ -1,7 +1,7 @@
 package configs
 
 import (
-	"PassManager/utils"
+	"github.com/dongxiaoyi/toolBox/pkg"
 	"fmt"
 	"github.com/Unknwon/goconfig"
 	"os"
@@ -10,7 +10,7 @@ import (
 
 
 func ParserConfig() *goconfig.ConfigFile {
-	dir := utils.AbsPath()
+	dir := pkg.AbsPath()
 	ini := filepath.Join(dir, "configs/settings.ini")
 	config, err := goconfig.LoadConfigFile(ini)
 	if err != nil {

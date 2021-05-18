@@ -1,22 +1,16 @@
 package main
 
 import (
-	"github.com/spf13/cobra"
-	"github.com/zhuah/socker"
 	"fmt"
+	"github.com/dongxiaoyi/socker"
+	"github.com/dongxiaoyi/sshtrust/configs"
+	"github.com/dongxiaoyi/sshtrust/utils"
+	"github.com/spf13/cobra"
 	"io/ioutil"
-	"os/exec"
+	"os"
 	"path"
-	"sshMutualTrust/configs"
-	"sshMutualTrust/utils"
 	"strings"
 	"time"
-)
-
-var (
-	cmd    *exec.Cmd
-	output []byte
-	err    error
 )
 
 type Host struct {
@@ -30,7 +24,7 @@ func main() {
 	// 初始化配置
 	configs.InitConfig()
 
-	var rootCmd = &cobra.Command{Use: "sshMutualTrust"}
+	var rootCmd = &cobra.Command{Use: "sshtrust"}
 	var cmdManyTrust = &cobra.Command{
 		Use:   "many",
 		Short: "多主机之间互信（配置manyNode.conf）.",
@@ -45,6 +39,7 @@ func main() {
 			ipDict, err := NodeConfig("configs/manyNode.conf")
 			if err != nil {
 				configs.Logger.Error(err)
+				os.Exit(4)
 			}
 
 			countSelect := 0
@@ -101,6 +96,7 @@ func main() {
 			singleIpList, err := NodeConfig("configs/singleNode.conf")
 			if err != nil {
 				configs.Logger.Error(err)
+				os.Exit(5)
 			}
 
 			countSingle := 0
@@ -154,6 +150,7 @@ func main() {
 	err := rootCmd.Execute()
 	if err != nil {
 		configs.Logger.Error(err)
+		os.Exit(3)
 	}
 
 }
@@ -167,7 +164,7 @@ func NodeConfig(conf string) ([]Host, error) {
 	bytes, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		configs.Logger.Error(err)
-		return ipDict, nil
+		return ipDict, err
 	}
 	ipuserList := strings.Split(string(bytes),"\n")
 
@@ -199,8 +196,19 @@ func SelectSecret(h Host, key chan string) {
 		configs.Logger.Infof("主机[%s]密钥检查完毕！", h.IP+":"+h.Port)
 		configs.Logger.Infof("正在搜集主机[%s]密钥！", h.IP+":"+h.Port)
 
-		r, _ := agent.Rcmd("cat ~/.ssh/id_rsa.pub")
+		r, err := agent.Rcmd("cat ~/.ssh/id_rsa.pub")
+		if err != nil {
+			configs.Logger.Error(err)
+			os.Exit(1)
+		}
+
 		configs.Logger.Infof("主机[%s]密钥搜集完毕！", h.IP+":"+h.Port)
+		err = agent.Error()
+		if err != nil {
+			configs.Logger.Error(err)
+			os.Exit(2)
+		}
+
 		agent.Close()
 		key <- string(r)
 	}
