@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/dongxiaoyi/socker"
 	"github.com/dongxiaoyi/sshtrust/configs"
-	"github.com/dongxiaoyi/sshtrust/utils"
+	"github.com/dongxiaoyi/toolBox/pkg"
 	"github.com/spf13/cobra"
 	"io/ioutil"
 	"os"
@@ -45,7 +45,6 @@ func main() {
 			countSelect := 0
 			for _, h := range ipDict {
 				go SelectSecret(h, key)
-
 			}
 			loopSelect:
 				for {
@@ -64,7 +63,7 @@ func main() {
 			down := make(chan bool, 0)
 			countWrite := 0
 			for _, h := range ipDict {
-				go SecretWrite(h, authKeys, down)
+				go SecretWrite(h, authKeys, down, "many")
 
 			}
 			loopWrite:
@@ -126,7 +125,7 @@ func main() {
 			down := make(chan bool, 0)
 			countWrite := 0
 			for _, h := range manyIpList {
-				go SecretWrite(h, singleKeys, down)
+				go SecretWrite(h, singleKeys, down, "single")
 
 			}
 			loopWrite:
@@ -155,12 +154,11 @@ func main() {
 
 }
 
-
 // 获取主机连接配置
 func NodeConfig(conf string) ([]Host, error) {
 	ipDict := make([]Host, 0)
 	// 解析manyNode.conf配置文件
-	filePath := path.Join(utils.AbsPath(), conf)
+	filePath := path.Join(pkg.AbsPath(), conf)
 	bytes, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		configs.Logger.Error(err)
@@ -194,6 +192,14 @@ func SelectSecret(h Host, key chan string) {
 		agent.Rcmd("if [ ! -f ~/.ssh/id_rsa ]; then ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa;fi")
 		agent.Rcmd("if [ ! -f ~/.ssh/authorized_keys ]; then touch ~/.ssh/authorized_keys;fi")
 		configs.Logger.Infof("主机[%s]密钥检查完毕！", h.IP+":"+h.Port)
+
+		if !configs.StrictHostKeyChecking {
+			agent.Rcmd("if [ ! -f ~/.ssh/config ]; then touch ~/.ssh/config;fi")
+			configs.Logger.Warnf("主机[%s]更新.ssh/config", h.IP+":"+h.Port)
+			agent.Rcmd("if ! grep 'StrictHostKeyChecking' ~/.ssh/config >/dev/null; then echo 'StrictHostKeyChecking no' > ~/.ssh/config; else sed -i 's#^StrictHostKeyChecking.*$#StrictHostKeyChecking no#g' ~/.ssh/config;fi")
+			agent.Rcmd("chmod 0600 ~/.ssh/config")
+		}
+
 		configs.Logger.Infof("正在搜集主机[%s]密钥！", h.IP+":"+h.Port)
 
 		r, err := agent.Rcmd("cat ~/.ssh/id_rsa.pub")
@@ -215,7 +221,7 @@ func SelectSecret(h Host, key chan string) {
 }
 
 // 写入互信密钥到远程主机
-func SecretWrite(h Host, authKeys []string, down chan bool) {
+func SecretWrite(h Host, authKeys []string, down chan bool, operatorType string) {
 	var sshConfig = &socker.Auth{User: h.User, Password: h.Password}
 
 	agent, err1 := socker.Dial(h.IP+":"+h.Port, sshConfig)
@@ -232,12 +238,17 @@ func SecretWrite(h Host, authKeys []string, down chan bool) {
 		}
 
 		agent.Rcmd("awk '{print $0}' ~/.ssh/auth.tmp ~/.ssh/authorized_keys|sort | uniq > ~/.ssh/auth.tmp2")
-		if !configs.StrictHostKeyChecking {
-			agent.Rcmd("if [ ! -f ~/.ssh/config ]; then touch ~/.ssh/config;fi")
-			configs.Logger.Warnf("主机[%s]更新.ssh/config", h.IP+":"+h.Port)
-			agent.Rcmd("if ! grep 'StrictHostKeyChecking' ~/.ssh/config >/dev/null; then echo 'StrictHostKeyChecking no' > ~/.ssh/config; else sed -i 's#^StrictHostKeyChecking.*$#StrictHostKeyChecking no#g' ~/.ssh/config;fi")
-			agent.Rcmd("chmod 0600 ~/.ssh/config")
+
+		// 只有operatorType为many的时候才需要写入
+		if operatorType == "many" {
+			if !configs.StrictHostKeyChecking {
+				agent.Rcmd("if [ ! -f ~/.ssh/config ]; then touch ~/.ssh/config;fi")
+				configs.Logger.Warnf("主机[%s]更新.ssh/config", h.IP+":"+h.Port)
+				agent.Rcmd("if ! grep 'StrictHostKeyChecking' ~/.ssh/config >/dev/null; then echo 'StrictHostKeyChecking no' > ~/.ssh/config; else sed -i 's#^StrictHostKeyChecking.*$#StrictHostKeyChecking no#g' ~/.ssh/config;fi")
+				agent.Rcmd("chmod 0600 ~/.ssh/config")
+			}
 		}
+
 		agent.Rcmd("cat ~/.ssh/auth.tmp2 > ~/.ssh/authorized_keys")
 		agent.Rcmd("chown " + h.User + " ~/.ssh/authorized_keys")
 		agent.Rcmd("chmod 0600 ~/.ssh/authorized_keys")

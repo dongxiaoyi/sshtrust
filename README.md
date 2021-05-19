@@ -5,8 +5,8 @@
 
 ## 二、项目结构
 ```shell
-$ tree sshTrustBin/
-sshTrustBin
+$ tree sshtrust/
+sshtrust
 ├── configs
 │   ├── manyNode.conf      ## 多个主机的连接信息
 │   ├── settings.ini       ## 配置文件
@@ -97,9 +97,9 @@ rotate_compress = false
 ## 四、互信操作
 ### 4.1 操作指令说明
 ```shell
-$ ./sshTrust --help                                 
+$ ./sshtrust --help                                 
 Usage:
-  sshTrust [command]
+  sshtrust [command]
 
 Available Commands:
   help        Help about any command
@@ -119,10 +119,10 @@ example:
 192.168.75.174 22 root redhat
 192.168.75.175 22 root redhat
 ```
-(2) 执行`./sshTrust many`
+(2) 执行`./sshtrust many`
 example:
 ```shell
-$ ./sshTrust many
+$ ./sshtrust many
 {"level":"info","time":"2020-03-13 20:29:40","msg":"开始配置主机互信!","service":"sshTrust"}
 {"level":"info","time":"2020-03-13 20:29:50","msg":"连接主机[192.168.75.175:22]成功！","service":"sshTrust"}
 {"level":"info","time":"2020-03-13 20:29:50","msg":"检查主机[192.168.75.175:22]是否存在密钥，不存在将创建！","service":"sshTrust"}
@@ -157,7 +157,7 @@ example:
 ```
 (3)执行`./sshTrust single`
 ```shell
-$ ./sshTrust single
+$ ./sshtrust single
 {"level":"info","time":"2020-03-13 20:31:31","msg":"开始配置主机互信!","service":"sshTrust"}
 {"level":"info","time":"2020-03-13 20:31:31","msg":"连接主机[127.0.0.1:22]成功！","service":"sshTrust"}
 {"level":"info","time":"2020-03-13 20:31:31","msg":"检查主机[127.0.0.1:22]是否存在密钥，不存在将创建！","service":"sshTrust"}
