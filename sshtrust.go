@@ -230,6 +230,13 @@ func SecretWrite(h Host, authKeys []string, down chan bool, operatorType string)
 		configs.Logger.Error("dial agent failed:", err1)
 		down <- false
 	} else {
+		// TODO: 远程主机没有ssh key的时候需要生成
+		configs.Logger.Infof("连接主机[%s]成功！", h.IP+":"+h.Port)
+		configs.Logger.Infof("检查主机[%s]是否存在密钥，不存在将创建！", h.IP+":"+h.Port)
+		agent.Rcmd("if [ ! -f ~/.ssh/id_rsa ]; then ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa;fi")
+		agent.Rcmd("if [ ! -f ~/.ssh/authorized_keys ]; then touch ~/.ssh/authorized_keys;fi")
+		configs.Logger.Infof("主机[%s]密钥检查完毕！", h.IP+":"+h.Port)
+
 		agent.Rcmd("if [ ! -f ~/.ssh/auth.tmp ]; then touch ~/.ssh/auth.tmp;fi")
 		agent.Rcmd("> ~/.ssh/auth.tmp")
 		for _, k := range authKeys {
@@ -252,7 +259,6 @@ func SecretWrite(h Host, authKeys []string, down chan bool, operatorType string)
 		agent.Rcmd("cat ~/.ssh/auth.tmp2 > ~/.ssh/authorized_keys")
 		agent.Rcmd("chown " + h.User + " ~/.ssh/authorized_keys")
 		agent.Rcmd("chmod 0600 ~/.ssh/authorized_keys")
-
 
 		configs.Logger.Infof("主机[%s]写入互信密钥完毕！", h.IP+":"+h.Port)
 		agent.Rcmd("rm -f ~/.ssh/auth.tmp")

@@ -11,7 +11,7 @@ sshtrust
 │   ├── manyNode.conf      ## 多个主机的连接信息
 │   ├── settings.ini       ## 配置文件
 │   └── singleNode.conf    ## 单个主机的连接信息（可以填写多个）
-└── sshTrust      ## 执行脚本（Linux）
+└── sshtrust      ## 执行脚本（Linux）
 
 1 directory, 5 files
 ```
@@ -179,4 +179,4 @@ $ ./sshtrust single
 - 操作完成后`192.168.75.174`和`192.168.75.175`的`~/.ssh/authorized_keys`中会添加`127.0.0.1`、`192.168.75.111`的`~/.ssh/id_rsa.pub`
 
 ### 4.4 日志
-> 操作会在项目生成日志，路径`tmp/ssh.log`
+> 操作会在项目生成日志，路径`logs/ssh.log`
